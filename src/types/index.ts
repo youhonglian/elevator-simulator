@@ -24,7 +24,14 @@ export interface ElevatorState {
   capacity: number
 }
 
+export enum RequestSource {
+  INTERNAL = 'INTERNAL',
+  EXTERNAL = 'EXTERNAL',
+}
+
+export type RequestType = keyof typeof RequestSource
 export interface Request {
   floor: number
-  direction: RequestDirection
+  direction?: RequestDirection
+  requestType?: RequestType
 }

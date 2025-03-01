@@ -68,24 +68,27 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
 
+### Backend server
+
 ```sh
+cd backend
+# Install deps
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+# Compile the typescript file
+npm run build
+# Start backend server
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Frontend setup
 
 ```sh
+# Install deps
+npm install
+# Compile and Hot-Reload for Development
+npm run dev
+# Type-Check, Compile and Minify for Production
 npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
+# Lint with [ESLint](https://eslint.org/)
 npm run lint
 ```

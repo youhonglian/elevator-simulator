@@ -18,12 +18,12 @@
       </div>
 
       <div class="elevator-panel-content">
-        <button class="elevator-panel-btn elevator-panel-btn--action" @click="store.handleCloseDoor">
+        <button class="elevator-panel-btn elevator-panel-btn--action" @click="handleClickClose">
           CLOSE
         </button>
       </div>
       <div class="elevator-panel-content">
-        <button class="elevator-panel-btn elevator-panel-btn--action" @click="store.handleOpenDoor(3000)">
+        <button class="elevator-panel-btn elevator-panel-btn--action" @click="handleClickOpen">
           OPEN
         </button>
       </div>
@@ -34,37 +34,32 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { ref, onUnmounted } from 'vue';
+import { DoorState, RequestSource } from '@/types';
 import useElevatorStore from '@/stores/elevator';
 import ElevatorScreen from '@/components/ElevatorScreen.vue';
+import { callElevator, getElevatorStatus, updateDoorAction } from '@/utils/request';
 
 const store = useElevatorStore();
 const {
   totalFloors,
-  currentFloor,
-  isMoving,
-  targetFloors,
+  clickedFloors,
 } = storeToRefs(store);
 
-const clickedFloors = ref<Set<number>>(new Set());
+const floorClick = async (floor: number) => {
+  await callElevator({ floor, requestType: RequestSource.INTERNAL })
+};
 
-const floorClick = (index: number) => {
-  if (index == currentFloor.value && isMoving.value == false) {
-    store.handleOpenDoor(3000);
-    return;
-  }
-  if (clickedFloors.value.has(index)) {
-    return;
-  }
-  clickedFloors.value.add(index);
-  targetFloors.value.push(index);
+const handleClickOpen = async () => {
+  await updateDoorAction(DoorState.OPEN)
+};
+
+const handleClickClose = async () => {
+  await updateDoorAction(DoorState.CLOSE)
 };
 
 const timer = ref();
 
-timer.value = setInterval(
-  () => store.updateElevatorStatus(
-    () => clickedFloors.value.delete(currentFloor.value)
-  ), 2200);
+timer.value = setInterval(() => getElevatorStatus(), 1500);
 
 onUnmounted(() => {
   if (timer.value) {

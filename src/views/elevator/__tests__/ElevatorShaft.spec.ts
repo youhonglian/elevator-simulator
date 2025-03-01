@@ -74,7 +74,7 @@ describe('ElevatorShaft', () => {
       const wrapper = mount(ElevatorShaft, {
         global: { plugins: [pinia] },
       })
-      store.handleOpenDoor(3000)
+      store.handleOpenDoor(200)
 
       setTimeout(() => {
         const door = wrapper.find('.elevator-door')

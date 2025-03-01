@@ -115,7 +115,6 @@ describe('ElevatorPanel', () => {
       global: { plugins: [pinia] },
     })
 
-    // simulate floor arrival
     store.currentFloor = 2
     store.targetFloors = [2]
 

@@ -11,7 +11,7 @@
     <span :class="[
       'elevator-screen-floor',
       {
-        'elevator-screen-floor--active': direction === Direction.STOP
+        'elevator-screen-floor--active': isDoorOpen
       }
     ]">
       {{ currentFloor }}
@@ -36,6 +36,7 @@ const store = useElevatorStore();
 const {
   direction,
   currentFloor,
+  isDoorOpen,
 } = storeToRefs(store);
 
 </script>

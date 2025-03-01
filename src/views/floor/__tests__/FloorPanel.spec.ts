@@ -78,14 +78,14 @@ describe('FloorPanel', () => {
       const middleFloor = wrapper.findAll('.floor-panel-control')[2]
 
       await middleFloor.find('.up-btn').trigger('click')
-      expect(store.exteralUpFloors.has(3)).toBe(true)
+      expect(store.externalUpFloors.has(3)).toBe(true)
       expect(store.addExternalRequest).toHaveBeenCalledWith({
         floor: 3,
         direction: Direction.UP,
       })
 
       await middleFloor.find('.down-btn').trigger('click')
-      expect(store.exteralDownFloors.has(3)).toBe(true)
+      expect(store.externalDownFloors.has(3)).toBe(true)
       expect(store.addExternalRequest).toHaveBeenCalledWith({
         floor: 3,
         direction: Direction.DOWN,

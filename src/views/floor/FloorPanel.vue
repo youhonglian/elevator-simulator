@@ -7,7 +7,7 @@
       <div class="floor-panel-content">
         <div class="floor-panel-operator">
           <button :class="{
-            'floor-panel-operator-btn--active': exteralUpFloors.has(n)
+            'floor-panel-operator-btn--active': externalUpFloors.has(n)
           }" class="floor-panel-operator-btn up-btn" :disabled="isBtnDisabled(n, Direction.UP)"
             @click="handleExternalRequest(n, Direction.UP)">
             ▲
@@ -15,7 +15,7 @@
           <button :class="[
             'floor-panel-operator-btn down-btn',
             {
-              'floor-panel-operator-btn--active': exteralDownFloors.has(n)
+              'floor-panel-operator-btn--active': externalDownFloors.has(n)
             }]" :disabled="isBtnDisabled(n, Direction.DOWN)" @click="handleExternalRequest(n, Direction.DOWN)">
             ▼
           </button>
@@ -31,13 +31,14 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { Direction } from '@/types/index';
+import { Direction, RequestSource } from '@/types/index';
 import useElevatorStore from '@/stores/elevator';
 import type { RequestDirection } from '@/types/index';
 import ElevatorScreen from '@/components/ElevatorScreen.vue';
+import { callElevator } from '@/utils/request';
 
 const store = useElevatorStore();
-const { totalFloors, floorHeight, exteralUpFloors, exteralDownFloors } = storeToRefs(store);
+const { totalFloors, floorHeight, externalUpFloors, externalDownFloors } = storeToRefs(store);
 
 const isBtnDisabled = (floor: number, direction: RequestDirection) => {
   if (floor === 1 && direction === Direction.DOWN) {
@@ -51,23 +52,12 @@ const isBtnDisabled = (floor: number, direction: RequestDirection) => {
   return false;
 };
 
-const handleExternalRequest = (floor: number, direction: RequestDirection) => {
+const handleExternalRequest = async (floor: number, direction: RequestDirection) => {
   if (isBtnDisabled(floor, direction)) {
     return;
   }
 
-  if (direction === Direction.UP) {
-    exteralUpFloors.value.add(floor);
-  }
-
-  if (direction === Direction.DOWN) {
-    exteralDownFloors.value.add(floor);
-  }
-
-  store.addExternalRequest({
-    floor: floor,
-    direction: direction,
-  });
+  await callElevator({ floor, direction, requestType: RequestSource.EXTERNAL })
 };
 
 </script>
